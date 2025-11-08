@@ -38,6 +38,24 @@ Get rewarded for your open source contributions! This platform uses GenLayer's i
 3. Receive **100 tokens** instantly for each verified contribution
 4. Track your rewards on the leaderboard
 
+```mermaid
+graph LR
+    A[Developer] -->|Submit PR Details| B[Vue.js Frontend]
+    B -->|Call submit_contribution| C[Smart Contract]
+    C -->|Fetch PR Data| D[GitHub]
+    D -->|Return HTML| C
+    C -->|Analyze with AI| E[GenLayer AI]
+    E -->|Verification Result| C
+    C -->|Store & Reward| F[Blockchain]
+    F -->|100 Tokens| A
+    F -->|Update| G[Leaderboard]
+
+    style A fill:#e1f5ff
+    style C fill:#ffe1e1
+    style E fill:#fff4e1
+    style F fill:#e1ffe1
+```
+
 **Default Configuration:**
 - **Reward per contribution:** 100 tokens
 - **Eligible contributions:** Merged pull requests only
@@ -47,6 +65,31 @@ Get rewarded for your open source contributions! This platform uses GenLayer's i
 - **Frontend:** Vue.js app in `/app` folder
 
 ## 📦 What's included
+
+```mermaid
+graph TD
+    A[Open Source Rewards Platform] --> B[Smart Contracts]
+    A --> C[Frontend Application]
+    A --> D[Deployment Tools]
+    A --> E[Testing Suite]
+
+    B --> B1[opensource_rewards.py<br/>Main contract logic]
+
+    C --> C1[ContributionsScreen.vue<br/>Main UI component]
+    C --> C2[OpenSourceRewards.js<br/>Contract wrapper]
+    C --> C3[genlayer.js<br/>SDK integration]
+
+    D --> D1[deployScript.ts<br/>Deploy automation]
+    D --> D2[config/<br/>Network configs]
+
+    E --> E1[test_opensource_rewards.py<br/>Contract tests]
+
+    style B fill:#ffcccb
+    style C fill:#add8e6
+    style D fill:#90ee90
+    style E fill:#fff68f
+```
+
 - **Smart Contract:** `contracts/opensource_rewards.py` - AI-powered intelligent contract for contribution verification
 - **Frontend App:** Vue.js application in `/app` folder with:
   - Wallet connection
@@ -63,6 +106,24 @@ Get rewarded for your open source contributions! This platform uses GenLayer's i
 - [GenLayer CLI](https://github.com/genlayerlabs/genlayer-cli) globally installed. To install or update the GenLayer CLI run `npm install -g genlayer`
 
 ## 🚀 Steps to run this platform
+
+```mermaid
+graph LR
+    A[1. Deploy Contract] -->|genlayer deploy| B[2. Configure Frontend]
+    B -->|Set .env vars| C[3. Install Dependencies]
+    C -->|npm install| D[4. Run Dev Server]
+    D -->|npm run dev| E[5. Open Browser]
+    E -->|localhost:5173| F[6. Connect Wallet]
+    F --> G[7. Submit Contributions]
+
+    style A fill:#ffcccb
+    style B fill:#add8e6
+    style C fill:#90ee90
+    style D fill:#fff68f
+    style E fill:#dda0dd
+    style F fill:#f0e68c
+    style G fill:#98fb98
+```
 
 ### 1. Deploy the contract
    Deploy the contract from `/contracts/opensource_rewards.py` using the GenLayer CLI:
@@ -104,6 +165,52 @@ Get rewarded for your open source contributions! This platform uses GenLayer's i
 
 The OpenSourceRewards contract uses GenLayer's intelligent contract capabilities to verify and reward open source contributions:
 
+### System Architecture
+
+```mermaid
+graph TB
+    subgraph "Frontend Layer"
+        A[Vue.js App]
+        B[OpenSourceRewards.js]
+        C[GenLayer Client]
+    end
+
+    subgraph "Smart Contract Layer"
+        D[OpenSourceRewards Contract]
+        E[Contribution Storage]
+        F[Rewards Ledger]
+        G[PR Registry]
+    end
+
+    subgraph "Verification Layer"
+        H[Web Scraper]
+        I[AI Analyzer]
+        J[Consensus Engine]
+    end
+
+    subgraph "External"
+        K[GitHub]
+        L[User Wallet]
+    end
+
+    A -->|User Input| B
+    B -->|SDK Call| C
+    C -->|Transaction| D
+    D -->|Fetch| H
+    H -->|Get PR| K
+    H -->|HTML Data| I
+    I -->|Analysis| J
+    J -->|Verified| D
+    D -->|Store| E
+    D -->|Update| F
+    D -->|Mark Used| G
+    D -->|Send Tokens| L
+
+    style D fill:#ff6b6b
+    style I fill:#4ecdc4
+    style J fill:#95e1d3
+```
+
 ### 1. Submitting Contributions
    Users submit contributions by providing **5 required fields**:
    - **GitHub Username**: Your GitHub account name (must match PR author)
@@ -116,6 +223,45 @@ The OpenSourceRewards contract uses GenLayer's intelligent contract capabilities
 
 ### 2. AI-Powered Verification Process
    The intelligent contract uses GenLayer's AI capabilities to verify each contribution:
+
+```mermaid
+sequenceDiagram
+    participant U as User
+    participant F as Frontend
+    participant SC as Smart Contract
+    participant GH as GitHub
+    participant AI as GenLayer AI
+    participant BC as Blockchain
+
+    U->>F: Submit PR Details
+    F->>SC: submit_contribution(username, org, project, url, pr_num)
+
+    Note over SC: Check PR not claimed
+    SC->>SC: Check submitted_prs registry
+
+    SC->>GH: Fetch PR page
+    GH-->>SC: HTML content
+
+    SC->>AI: Analyze PR data
+    Note over AI: Extract: author, org,<br/>project, merge status,<br/>spam detection
+    AI-->>SC: Verification results
+
+    alt All checks pass
+        SC->>SC: Validate author match
+        SC->>SC: Validate org match
+        SC->>SC: Validate project match
+        SC->>SC: Check not spam
+        SC->>SC: Store contribution
+        SC->>SC: Mark PR as claimed
+        SC->>BC: Award 100 tokens
+        BC-->>U: Tokens received ✅
+        SC-->>F: Success
+        F-->>U: Contribution verified!
+    else Verification fails
+        SC-->>F: Error message
+        F-->>U: Submission rejected ❌
+    end
+```
 
    **Step 1:** Fetch PR data from GitHub
    - Constructs PR URL: `{repo_url}/pull/{pr_number}`
@@ -146,6 +292,48 @@ The OpenSourceRewards contract uses GenLayer's intelligent contract capabilities
    - **Immutable:** All contributions stored permanently on-chain
 
 ### 4. Leaderboard & Tracking Features
+
+```mermaid
+graph LR
+    subgraph "Contract State"
+        A[contributions<br/>TreeMap]
+        B[total_rewards<br/>TreeMap]
+        C[submitted_prs<br/>TreeMap]
+    end
+
+    subgraph "View Functions"
+        D[get_my_contributions]
+        E[get_all_contributions]
+        F[get_my_rewards]
+        G[get_all_rewards]
+        H[get_user_rewards]
+    end
+
+    subgraph "Write Functions"
+        I[submit_contribution]
+    end
+
+    A -->|Read| D
+    A -->|Read| E
+    B -->|Read| F
+    B -->|Read| G
+    B -->|Read| H
+
+    I -->|Update| A
+    I -->|Update| B
+    I -->|Update| C
+
+    style A fill:#ffe1e1
+    style B fill:#e1ffe1
+    style C fill:#e1e1ff
+    style D fill:#fff4e1
+    style E fill:#fff4e1
+    style F fill:#fff4e1
+    style G fill:#fff4e1
+    style H fill:#fff4e1
+    style I fill:#ffcccb
+```
+
    **View Functions (no gas cost):**
    - `get_my_contributions()`: Your submitted contributions
    - `get_all_contributions()`: All verified contributions from all users
@@ -155,6 +343,30 @@ The OpenSourceRewards contract uses GenLayer's intelligent contract capabilities
    - `get_reward_per_contribution()`: Current reward amount per PR
 
 ### Key Features:
+
+```mermaid
+mindmap
+  root((Open Source<br/>Rewards))
+    Security
+      Trustless AI Verification
+      Duplicate Prevention
+      Author Verification
+      Org Validation
+    Quality
+      Spam Protection
+      Merge Verification
+      Quality Analysis
+    Transparency
+      On-chain Storage
+      Public Leaderboard
+      View Functions
+    User Experience
+      Instant Rewards
+      Simple Submission
+      Real-time Updates
+      Wallet Integration
+```
+
 - 🤖 **Trustless Verification**: AI validates contributions without manual review or admin approval
 - 🚫 **Duplicate Prevention**: Global registry ensures each PR can only be claimed once across all users
 - 👤 **Author Verification**: Cryptographically ensures claimants actually created the PRs
@@ -165,6 +377,32 @@ The OpenSourceRewards contract uses GenLayer's intelligent contract capabilities
 - 📊 **Leaderboard**: Real-time ranking of top contributors
 
 ## 🎯 Contribution Requirements
+
+```mermaid
+flowchart TD
+    Start([User Submits PR]) --> Check1{PR Merged?}
+    Check1 -->|No| Reject1[❌ Reject: PR not merged]
+    Check1 -->|Yes| Check2{Author Matches?}
+    Check2 -->|No| Reject2[❌ Reject: Wrong author]
+    Check2 -->|Yes| Check3{Org Matches?}
+    Check3 -->|No| Reject3[❌ Reject: Wrong organization]
+    Check3 -->|Yes| Check4{Project Matches?}
+    Check4 -->|No| Reject4[❌ Reject: Wrong project]
+    Check4 -->|Yes| Check5{Not Spam?}
+    Check5 -->|Spam| Reject5[❌ Reject: Spam detected]
+    Check5 -->|Valid| Check6{Not Claimed?}
+    Check6 -->|Already claimed| Reject6[❌ Reject: Already claimed]
+    Check6 -->|Available| Success[✅ Award 100 Tokens]
+
+    style Start fill:#e1f5ff
+    style Success fill:#e1ffe1
+    style Reject1 fill:#ffe1e1
+    style Reject2 fill:#ffe1e1
+    style Reject3 fill:#ffe1e1
+    style Reject4 fill:#ffe1e1
+    style Reject5 fill:#ffe1e1
+    style Reject6 fill:#ffe1e1
+```
 
 To earn rewards, your pull request must meet **ALL** requirements:
 
@@ -178,6 +416,43 @@ To earn rewards, your pull request must meet **ALL** requirements:
 | ✅ **Not Claimed** | PR hasn't been submitted before by anyone | Contract checks global registry |
 
 **Example Valid Submission:**
+
+```mermaid
+graph TD
+    A[User Input] --> B[GitHub Username: johndoe]
+    A --> C[Organization: facebook]
+    A --> D[Project Name: react]
+    A --> E[Repository URL:<br/>github.com/facebook/react]
+    A --> F[PR Number: 12345]
+
+    B --> G{AI Verification}
+    C --> G
+    D --> G
+    E --> G
+    F --> G
+
+    G -->|Check 1| H[✓ PR is merged]
+    G -->|Check 2| I[✓ Author = johndoe]
+    G -->|Check 3| J[✓ Org = facebook]
+    G -->|Check 4| K[✓ Project = react]
+    G -->|Check 5| L[✓ Not spam]
+    G -->|Check 6| M[✓ Not claimed]
+
+    H --> N[All Checks Pass]
+    I --> N
+    J --> N
+    K --> N
+    L --> N
+    M --> N
+
+    N --> O[💰 Award 100 Tokens]
+
+    style A fill:#e1f5ff
+    style G fill:#fff4e1
+    style N fill:#e1ffe1
+    style O fill:#90ee90
+```
+
 - GitHub Username: `johndoe`
 - Organization: `facebook`
 - Project Name: `react`
