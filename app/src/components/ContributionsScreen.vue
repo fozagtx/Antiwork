@@ -1,5 +1,6 @@
 <template>
-  <div class="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 text-gray-900">
+  <div class="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 text-gray-900 pb-12">
+    <div class="fixed inset-0 bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 -z-10"></div>
     <header class="bg-white/80 backdrop-blur-lg shadow-lg border-b border-gray-200 flex justify-between sticky top-0 z-10">
       <div class="max-w-7xl py-6 px-4 sm:px-6 lg:px-8">
         <h1 class="text-4xl font-extrabold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Open Source Rewards</h1>
