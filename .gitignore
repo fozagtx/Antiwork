@@ -17,3 +17,4 @@ __pycache__/
 *.pyd
 deploy/deployScript.compiled.js
 /context
+.vercel
